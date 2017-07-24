@@ -139,7 +139,7 @@ class RunWorker
         }
 
         if (is_null($worker)) {
-            throw new Exception("NQueue queue:$queue is not found!");
+            throw new Exception("KResque queue:$queue is not found!");
         }
 
         return $worker;
@@ -152,7 +152,7 @@ class RunWorker
      * @return FileLog
      *
      */
-    protected function _initLogger($test = true)
+    protected function _initLogger($test = false)
     {
 
         if ($test) {
@@ -179,7 +179,6 @@ class RunWorker
     {
 
         $this->_logger = $this->_initLogger();
-
         $count = $this->_config->getWorkerCount();
         $queue = $this->_config->getQueue();
 

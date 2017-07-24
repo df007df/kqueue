@@ -22,7 +22,7 @@ class JobConfig
 
     public $max_queue_retry = 500;
 
-    public $log_path = '/tmp/m_queue_logs/';
+    public $log_path = '/tmp/kresque_logs/';
 
     /**
      * @var int 0|1|2

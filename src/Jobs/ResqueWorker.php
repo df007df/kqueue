@@ -18,10 +18,11 @@ class ResqueWorker extends Resque_Worker
      * @todo 正确获取执行的 queue
      * @return array
      */
-    public static function getWorkerPids()
+    public static function getWorkerPids($queue = '')
     {
         $pids = [];
-        exec('ps -A -o pid,command | grep [r]esque/listen', $cmdOutput);
+        $cmd = "ps -A -o pid,command | grep \"[r]esque/listen $queue\"";
+        exec($cmd, $cmdOutput);
         foreach ($cmdOutput as $line) {
             list($pids[],) = explode(' ', trim($line), 2);
         }
@@ -31,10 +32,10 @@ class ResqueWorker extends Resque_Worker
 
 
     //平滑kill redis记录中步在运行的worker
-    public static function pruneAllWorkers()
+    public static function pruneAllWorkers($queue = '')
     {
 
-        $pids = self::getWorkerPids();
+        $pids = self::getWorkerPids($queue);
         foreach ($pids as $pid) {
             self::killProcess($pid);
         }
@@ -43,7 +44,7 @@ class ResqueWorker extends Resque_Worker
 
     public static function killProcess($pid)
     {
-        posix_kill($pid, SIGKILL);
+        posix_kill($pid, SIGQUIT);
     }
 
 
