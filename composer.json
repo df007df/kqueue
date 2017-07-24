@@ -1,5 +1,5 @@
 {
-  "name": "knjk/KResque",
+  "name": "knjk/kresque",
   "description": "一个基于php-resque队列",
   "homepage": "https://git.kuainiujinke.com/knjk/KResque",
   "license": "MIT",
