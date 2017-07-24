@@ -1,0 +1,28 @@
+{
+  "name": "knjk/KResque",
+  "description": "一个基于php-resque队列",
+  "homepage": "https://git.kuainiujinke.com/knjk/KResque",
+  "license": "MIT",
+  "keywords": [
+    "php-resque",
+    "redis"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "df",
+      "email": "duanfei@qianshengqian.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0",
+    "yiisoft/yii2": ">=2.0.6",
+    "chrisboulton/php-resque": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "KResque\\": "src/"
+    }
+  },
+  "minimum-stability": "dev-master"
+}
