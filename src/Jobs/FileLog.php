@@ -35,6 +35,16 @@ class FileLog extends Resque_Log
     }
 
 
+    public function getLogFile()
+    {
+
+        $logFile = $this->_config->getQueue() . '.resque.log';
+        $logFile = rtrim($this->_config->log_path, '/') . "/$logFile";
+
+        return $logFile;
+    }
+
+
     protected function _getOut()
     {
         //prd($this->_config->log_path);
@@ -42,8 +52,7 @@ class FileLog extends Resque_Log
             mkdir($this->_config->log_path);
         }
 
-        $logFile = $this->_config->getQueue() . '.log';
-        $logFile = rtrim($this->_config->log_path, '/') . "/$logFile";
+        $logFile = $this->getLogFile();
 
         if (!file_exists($logFile) || is_null($this->_file_out)) {
             $this->_file_out = fopen($logFile, 'a');
