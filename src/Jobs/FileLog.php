@@ -66,19 +66,37 @@ class FileLog extends Resque_Log
     {
         $pid = getmypid();
         if ($this->verbose) {
-            fwrite(
-                $this->_getOut(),
-                '[' . $level . '][' . $pid . '][' . strftime('%Y-%m-%d %T') . '] ' . $this->interpolate($message, $context) . PHP_EOL
-            );
+
+            $this->isFlock($this->_getOut(), function ($fp) use ($level, $pid, $message, $context) {
+
+                fwrite(
+                    $fp,
+                    '[' . $level . '][' . $pid . '][' . strftime('%Y-%m-%d %T') . '] ' . $this->interpolate($message, $context) . PHP_EOL
+                );
+            });
 
             return;
         }
 
         if (!($level === LogLevel::INFO || $level === LogLevel::DEBUG)) {
-            fwrite(
-                $this->_getOut(),
-                '[' . $level . '][' . $pid . ']' . $this->interpolate($message, $context) . PHP_EOL
-            );
+
+            $this->isFlock($this->_getOut(), function ($fp) use ($level, $pid, $message, $context) {
+
+                fwrite(
+                    $fp,
+                    '[' . $level . '][' . $pid . ']' . $this->interpolate($message, $context) . PHP_EOL
+                );
+            });
+        }
+    }
+
+
+    public function isFlock($fp, $fun)
+    {
+
+        if (flock($fp, LOCK_EX)) {
+            $fun($fp);
+            flock($fp, LOCK_UN);
         }
     }
 
