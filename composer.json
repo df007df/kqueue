@@ -22,5 +22,6 @@
     "psr-4": {
       "KResque\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "dev"
 }
