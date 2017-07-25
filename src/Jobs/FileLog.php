@@ -8,6 +8,7 @@
 
 namespace KResque\Jobs;
 
+use Resque_Redis;
 use Resque_Log;
 use Psr\Log\LogLevel;
 
@@ -38,7 +39,18 @@ class FileLog extends Resque_Log
     public function getLogFile()
     {
 
-        $logFile = $this->_config->getQueue() . '.resque.log';
+        $prefix = Resque_Redis::getPrefix();
+
+        $logPatchs = [
+            $this->_config->getQueue(),
+            'resque.log'
+        ];
+
+        if ($prefix) {
+            array_unshift($logPatchs, trim($prefix, ':'));
+        }
+
+        $logFile = implode('.', $logPatchs);
         $logFile = rtrim($this->_config->log_path, '/') . "/$logFile";
 
         return $logFile;
