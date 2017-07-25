@@ -18,7 +18,7 @@ class JobConfig
 
     public $worker_count = 1;
 
-    public $queue = 'app_name';
+    public $queue = '';
 
     public $max_queue_retry = 500;
 
@@ -78,12 +78,6 @@ class JobConfig
     public function getPidFile()
     {
         return $this->pid_file;
-    }
-
-
-    public function setBackend()
-    {
-        Resque::setBackend('localhost:6379');
     }
 
 }

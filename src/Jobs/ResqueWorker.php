@@ -31,7 +31,12 @@ class ResqueWorker extends Resque_Worker
     }
 
 
-    //平滑kill redis记录中步在运行的worker
+    /**
+     * 删除全部队列
+     * @todo 但是不针对具体项目
+     *
+     * @param string $queue
+     */
     public static function pruneAllWorkers($queue = '')
     {
 

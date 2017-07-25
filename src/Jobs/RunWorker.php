@@ -41,6 +41,7 @@ class RunWorker
 
         $appConfig = $config['app'];
         Resque::setBackend($appConfig['host']);
+        Resque_Redis::prefix($appConfig['id']);
 
         $jobs = $config['jobs'];
 
@@ -52,10 +53,8 @@ class RunWorker
     }
 
 
-    public static function getInfo($config)
+    public static function getInfo()
     {
-
-        $config = self::parseConfig($config);
 
         $queues = Resque::queues();
         $prefix = Resque_Redis::getPrefix();
@@ -97,11 +96,11 @@ class RunWorker
     }
 
 
-    public static function getFailedList($config, $page = 1, $limit = 25)
+    public static function getFailedList($page = 1, $limit = 25)
     {
         $resqueFailed = 'failed';
 
-        $config = self::parseConfig($config);
+        //$config = self::parseConfig($config);
 
         $count = Resque::redis()->llen($resqueFailed);
 
@@ -124,7 +123,6 @@ class RunWorker
      */
     public static function runWithConfig($configs, $queue)
     {
-        $configs = self::parseConfig($configs);
 
         $worker = null;
         foreach ($configs as $config) {

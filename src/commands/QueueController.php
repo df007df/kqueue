@@ -8,31 +8,52 @@
 
 namespace KResque\commands;
 
-use NQueue\Jobs\RunWorker;
-use Queue\Jobs\DemoJob;
 use yii\console\Controller;
+use Yii;
 
 class QueueController extends Controller
 {
 
 
-    public function actionPush()
+    public function getResque()
     {
-        $result = DemoJob::enqueue([
-            'name' => 'gogo',
-            'date' => date('Y-m-d H:i:s'),
-        ]);
-
-
-        prd($result);
+        return Yii::$app->resque;
     }
 
 
-    public function actionListen()
+    /**
+     * @param $queue
+     */
+    public function actionListen($queue)
     {
 
+        return $this->getResque()->listen($queue);
+    }
 
 
+    /**
+     * @param $queue
+     */
+    public function actionListenTest($queue)
+    {
+
+        return $this->getResque()->listen($queue, true);
+    }
+
+
+    public function actionInfo()
+    {
+
+        $info = $this->getResque()->info();
+
+        prd($info);
+    }
+
+
+    public function actionKill($queue = '')
+    {
+
+        $info = $this->getResque()->kill($queue);
     }
 
 }
