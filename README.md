@@ -110,6 +110,9 @@ INSTALL
     #队列进程监听开始
     ./yii queue/resque/listen CreditFetchJob    
     
+    #队列进程监听开始(测试模式，当前shell下执行，单进程模式)
+    ./yii queue/resque/listen CreditFetchJob    
+    
     #关闭队列监听，请勿直接 kill pid.
     ./yii queue/resque/kill [CreditFetchJob]
 ```
