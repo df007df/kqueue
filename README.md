@@ -14,38 +14,99 @@ INSTALL
         }
     ],
     "require": {
-        "knjk/KResque" : "dev-master",
+        "chrisboulton/php-resque": "@dev",
+        "knjk/KResque" : "dev-master"
     },
 ```
 
 2. 执行composer install安装模块，vendor目录会多出vendor/knjk/KResque目录，即表示安装成功
-//3. 在项目根目录执行./yii migrate -p=vendor/knjk/KResque/src/migrations。新建工作流数据库
 
 3. 配置文件说明
 ```
 
-        $config = [
-
-            'app'  => [
-                'host' => 'localhost:6379',
-                'job'  => [
-                    'queue' => 'app_fk_name',
-                ]
-
-            ],
-            'jobs' => [
-                [
-                    'job'             => 'Queue\Jobs\DemoJob', //具体实现的类型
-                    'worker_count'    => 2,                    //开启 worker 的数量
-                    'max_queue_retry' => 500,                  //
+        'components' => [
+        
+            'resque' => [
+            
+                'class' => 'KResque\ResqueComponent',
+                'app'  => [
+                    'host' => 'localhost:6379',
+                    'id'   => 'fk_resque',
+    
                 ],
-                [
-                    'job'             => 'Queue\Jobs\TestJob',
-                    'worker_count'    => 2,
-                    'max_queue_retry' => 500,
+                'jobs' => [
+                    [
+                        'job'             => 'Queue\Jobs\DemoJob', //具体实现的类型
+                        'worker_count'    => 2,                    //开启 worker 的数量
+                        'max_queue_retry' => 500,                  //
+                    ],
+                    [
+                        'job'             => 'Queue\Jobs\TestJob',
+                        'worker_count'    => 2,
+                        'max_queue_retry' => 500,
+                    ]
                 ]
             ]
-
         ];
+
+```
+
+5. 代码说明
+```
+     
+     //job类说明
+     
+        use KResque\Jobs\BaseJob;
         
+        class DemoJob extends BaseJob  //注意继承此类
+        {
+        
+        
+            //job 执行之前执行的操作
+            public function setUp()
+            {
+        
+                echo 'setUp';
+            }
+        
+            //job 成功执行之后执行的操作
+            public function tearDown()
+            {
+                echo 'tearDown';
+            }
+        
+            //job 实际的执行逻辑
+            public function perform()
+            {
+                //$this->getArg('key'), 获取传入的参数
+                echo $this->getArg('name');
+        
+                sleep(1);
+            }
+        
+    }
+
+    #发送一条任务到队列中：
+    #第一个参数，job类名。第二个参数，传入的需要的参数，没个数限制（不能为对象）
+
+    $result = Yii::$app->resque->enqueue("Queue\\Jobs\\DemoJob", [
+      'name' => 'test_name',
+      'date' => date('Y-m-d H:i:s'),
+    ]);
+```
+
+6. 命令说明
+```
+     # CreditFetchJob 实际job 对应的类名
+     #显示队列状态  
+    ./yii queue/resque/info  
+    
+    #队列进程监听开始
+    ./yii queue/resque/listen CreditFetchJob    
+    
+    #队列进程监听开始(测试模式，当前shell下执行，单进程模式)
+    ./yii queue/resque/listen-test CreditFetchJob    
+    
+    #关闭队列监听，请勿直接 kill pid.
+    ./yii queue/resque/kill [CreditFetchJob]
 ```
