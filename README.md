@@ -55,30 +55,11 @@ INSTALL
         ];
 ```
 
-5. 基本使用说明
+5. 代码说明
 ```
-
-    #发送一条任务到队列中：
-    #第一个参数，job类名。第二个参数，传入的需要的参数，没个数限制（不能为对象）
-
-    $result = Yii::$app->resque->enqueue("Queue\\Jobs\\DemoJob", [
-      'name' => 'test_name',
-      'date' => date('Y-m-d H:i:s'),
-    ]);
-```
-
-6. job类说明
-```
-       <?php
-        /**
-         * Created by PhpStorm.
-         * User: df
-         * Date: 17/7/14
-         * Time: 15:55
-         */
-        
-        namespace Queue\Jobs;
-        
+     
+     //job类说明
+     
         use KResque\Jobs\BaseJob;
         
         class DemoJob extends BaseJob  //注意继承此类
@@ -107,6 +88,26 @@ INSTALL
                 sleep(1);
             }
         
-        }
+    }
 
+    #发送一条任务到队列中：
+    #第一个参数，job类名。第二个参数，传入的需要的参数，没个数限制（不能为对象）
+
+    $result = Yii::$app->resque->enqueue("Queue\\Jobs\\DemoJob", [
+      'name' => 'test_name',
+      'date' => date('Y-m-d H:i:s'),
+    ]);
+```
+
+6. 命令说明
+```
+     # CreditFetchJob 实际job 对应的类名
+     #显示队列状态  
+    ./yii queue/resque/info  
+    
+    #队列进程监听开始
+    ./yii queue/resque/listen CreditFetchJob    
+    
+    #关闭队列监听，请勿直接 kill pid.
+    ./yii queue/resque/kill [CreditFetchJob]
 ```
