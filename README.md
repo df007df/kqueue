@@ -22,7 +22,8 @@ INSTALL
         }
     ],
     "require": {
-        "knjk/KResque" : "dev-master",
+        "chrisboulton/php-resque": "@dev",
+        "knjk/KResque" : "dev-master"
     },
 ```
 
@@ -30,28 +31,29 @@ INSTALL
 4. 配置文件说明
 ```
 
-        $config = [
-
-            'app'  => [
-                'host' => 'localhost:6379',
-                'job'  => [
-                    'queue' => 'app_fk_name',
-                ]
-
-            ],
-            'jobs' => [
-                [
-                    'job'             => 'Queue\Jobs\DemoJob', //具体实现的类型
-                    'worker_count'    => 2,                    //开启 worker 的数量
-                    'max_queue_retry' => 500,                  //
+        'components' => [
+        
+            'resque' => [
+            
+                'class' => 'KResque\ResqueComponent',
+                'app'  => [
+                    'host' => 'localhost:6379',
+                    'id'   => 'fk_resque',
+    
                 ],
-                [
-                    'job'             => 'Queue\Jobs\TestJob',
-                    'worker_count'    => 2,
-                    'max_queue_retry' => 500,
+                'jobs' => [
+                    [
+                        'job'             => 'Queue\Jobs\DemoJob', //具体实现的类型
+                        'worker_count'    => 2,                    //开启 worker 的数量
+                        'max_queue_retry' => 500,                  //
+                    ],
+                    [
+                        'job'             => 'Queue\Jobs\TestJob',
+                        'worker_count'    => 2,
+                        'max_queue_retry' => 500,
+                    ]
                 ]
             ]
-
         ];
 ```
 
