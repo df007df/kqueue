@@ -5,7 +5,7 @@
 
 INSTALL
 -------------------
-1. 添加composer.json
+#### 添加composer.json
 ```
     "repositories": [
         {
@@ -19,12 +19,13 @@ INSTALL
     },
 ```
 
-2. 执行composer install安装模块，vendor目录会多出vendor/knjk/KResque目录，即表示安装成功
+#### 执行composer install安装模块，vendor目录会多出vendor/knjk/KResque目录，即表示安装成功
 
-3. 配置文件说明
+#### 配置文件说明
+
+
 ```
-
-        'components' => [
+'components' => [
         
             'resque' => [
             
@@ -47,11 +48,12 @@ INSTALL
                     ]
                 ]
             ]
-        ];
+ ];
 
+        
 ```
 
-5. 代码说明
+#### 代码说明
 ```
      
      //job类说明
@@ -95,7 +97,7 @@ INSTALL
     ]);
 ```
 
-6. 命令说明
+#### 命令说明
 ```
      # CreditFetchJob 实际job 对应的类名
      #显示队列状态  
