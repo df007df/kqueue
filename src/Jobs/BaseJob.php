@@ -3,6 +3,7 @@
 namespace KResque\Jobs;
 
 use Resque;
+use Resque_Event;
 
 /**
  * Created by PhpStorm.
@@ -24,21 +25,19 @@ abstract class BaseJob
     abstract function perform();
 
 
-    public function getArg($key = '*', $default = null)
+    /**
+     *
+     * @param array $params [exception, job]
+     */
+    public static function onFailure($params = [])
     {
-
-        if ($key == '*') {
-            return $this->args;
-        } else {
-            return isset($this->args[$key]) ? $this->args[$key] : $default;
-        }
     }
 
 
     public function setUp()
     {
-
-        echo 'setUp';
+        $className = get_called_class();
+        Resque_Event::listen('onFailure', [$className, 'onFailure']);
     }
 
 
@@ -55,6 +54,17 @@ abstract class BaseJob
 
     public function status()
     {
+    }
+
+
+    public function getArg($key = '*', $default = null)
+    {
+
+        if ($key == '*') {
+            return $this->args;
+        } else {
+            return isset($this->args[$key]) ? $this->args[$key] : $default;
+        }
     }
 
 
