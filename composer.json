@@ -1,7 +1,7 @@
 {
-  "name": "knjk/kresque",
-  "description": "一个基于php-resque队列",
-  "homepage": "https://git.kuainiujinke.com/knjk/kresque",
+  "name": "knjk/kqueue",
+  "description": "一个基于yii2-queue队列",
+  "homepage": "https://git.kuainiujinke.com/knjk/kqueue",
   "license": "MIT",
   "keywords": [
     "php-resque",
@@ -16,11 +16,11 @@
   "require": {
     "php": ">=5.6.0",
     "yiisoft/yii2": ">=2.0.6",
-    "chrisboulton/php-resque": "dev-master"
+    "yiisoft/yii2-queue": "~2.0.0"
   },
   "autoload": {
     "psr-4": {
-      "KResque\\": "src/"
+      "KQueue\\": "src/"
     }
   },
   "minimum-stability": "dev"
