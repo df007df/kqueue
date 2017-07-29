@@ -124,8 +124,9 @@ $msg->isDone();
     #队列进程监听开始
     yii queue/listen DemoJob --verbose=1 --color=0    
     
-    #关闭队列监听，请勿直接 kill pid.
-    ./yii queue/resque/kill [CreditFetchJob]
+    #kill 进程，请自行查找pid 然后kill
+    #此命令基本只是本地调试时使用，多进程管理请参考 supervisor
+    #原生不支持多进程启动，我猜因为实际部署都会用 supervisor进行管理。那还是原生不要支持多进程吧，多此一举，增加复杂度了。
     
 ```
 
