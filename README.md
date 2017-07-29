@@ -152,6 +152,8 @@ yii queue/super <superPath> [suffix] [user] [...options...]
 --save: boolean, 0 or 1 (defaults to 0)
   刷新supervisor配置  
   
+
+#下面命令是mac, 使用时参数请自行替换。
   
 #打印配置文件的内容，进行查看  
 ./yii queue/super /usr/local/etc/supervisor.d ini df
