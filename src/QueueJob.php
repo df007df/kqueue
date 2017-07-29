@@ -56,7 +56,7 @@ class QueueJob extends Model implements RetryableJob
 
 
     /**
-     * @return QueueRedisComponent
+     * @return QueueComponent
      */
     public static function getQueue()
     {
@@ -69,6 +69,10 @@ class QueueJob extends Model implements RetryableJob
     }
 
 
+    /**
+     * 获取job唯一标示
+     * @return mixed
+     */
     public static function getId()
     {
         $className = static::class;
@@ -83,22 +87,36 @@ class QueueJob extends Model implements RetryableJob
      * 发送队列
      *
      * @param array $params
-     * @param int $time
+     * @param int $second
      *
      * @return static
      */
-    public static function push($params = [], $time = 0)
+    public static function push($params = [], $second = 0)
     {
 
         $model = new static($params);
 
-        if ($time > 0) {
-            $model->_msgId = static::getQueue()->delay($time)->push($model);
+        if ($second > 0) {
+            $model->_msgId = static::getQueue()->delay($second)->push($model);
         } else {
             $model->_msgId = static::getQueue()->push($model);
         }
 
         return $model;
+    }
+
+
+    /**
+     * 从新push 当前job到延迟队列
+     *
+     * @param  int $second
+     *
+     * @return null|string
+     */
+    public function pushDelay($second)
+    {
+
+        return static::getQueue()->delay($second)->push($this);
     }
 
 

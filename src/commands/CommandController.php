@@ -9,9 +9,7 @@
 namespace KQueue\commands;
 
 use Yii;
-use yii\queue\redis\Command;
 use yii\queue\cli\Command as CliCommand;
-use yii\queue\redis\InfoAction;
 use KQueue\QueueComponent;
 
 class CommandController extends CliCommand

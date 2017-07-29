@@ -9,6 +9,7 @@ use yii\queue\LogBehavior;
 use KQueue\Exceptions\TemporaryUnprocessableJobException;
 use KQueue\commands\CommandController;
 use Exception;
+use yii\redis\Connection;
 
 /**
  * yii2-queue
@@ -26,6 +27,9 @@ class QueueComponent extends Queue
 
     protected static $_workerRedis = [];
 
+    /**
+     * @var Connection|array|string
+     */
     public $redis = [
         'hostname' => 'localhost',
         'port'     => 6379
@@ -64,7 +68,8 @@ class QueueComponent extends Queue
 
         if ($event->error instanceof Exception) {
             $queue = $event->sender;
-            //$queue->delay(7200)->push($job);
+
+            //$queue->delay(60)->push($job);
         }
     }
 
