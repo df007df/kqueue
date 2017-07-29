@@ -61,6 +61,8 @@ class TestJob extends QueueJob
 
 
     public $name;     //push队列时，传入参数的对应属性声明
+    
+    public $date;
 
 
     //job 执行函数
@@ -94,32 +96,41 @@ class TestJob extends QueueJob
 #### 发送队列
 ```
 
-#发送一条任务到队列中：
-#第一个参数，job类名。第二个参数，传入的需要的参数，没个数限制（不能为对象）
+#发送一条job到队列中：
+#第一个参数，job类名。第二个参数，传入的需要的参数，数组形式，对应好类的属性。
 
 $msg = TestJob::push([
-    'name' => rand(1,50)
+    'name' => rand(1,50),
+    'date' => date('Y-m-d H:i:s')
 ]);
 
-$result = Yii::$app->resque->enqueue("Queue\\Jobs\\DemoJob", [
-    'name' => 'test_name',
-    'date' => date('Y-m-d H:i:s'),
-]);    
+//返回队列id
+$msg->hasMsgId();
+
+//判断 job 是否在等待
+$msg->isWaiting();
+
+//判断 job 是否执行完成
+$msg->isDone();
+
+//详见代码
 
 ```
 
-#### 命令说明
+#### 简单命令说明
 ```
-     # CreditFetchJob 实际job 对应的类名
-     #显示队列状态  
-    ./yii queue/resque/info  
-    
+    #DemoJob 实际job对应的类文件名，保持完全一致
+   
     #队列进程监听开始
-    ./yii queue/resque/listen CreditFetchJob    
-    
-    #队列进程监听开始(测试模式，当前shell下执行，单进程模式)
-    ./yii queue/resque/listen-test CreditFetchJob    
+    yii queue/listen DemoJob --verbose=1 --color=0    
     
     #关闭队列监听，请勿直接 kill pid.
     ./yii queue/resque/kill [CreditFetchJob]
+    
 ```
+
+#### 搭配 supervisor 使用
+
+##### 因为此队列建议通过 supervisor 进行多进程管理，所以实际线上部署时，请使用 supervisor 进行管理。（supervisor使用请自行g）
+
+
