@@ -90,7 +90,7 @@ class QueueComponent extends Queue
             $workerName = $className::getId();
 
             if ($workerName == $worker) {
-                $this->channel = static::$channelBase . ':' . $workerName;
+                $this->channel = static::$channelBase . ':' . $workerName . ':';
                 $find = true;
                 break;
             }

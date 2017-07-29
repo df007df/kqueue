@@ -26,11 +26,11 @@ class SupervisorHelper extends Model
 
     public $autostart = true;
 
-    public $startsecs = 10;
+    public $startsecs = 5;
 
     public $autorestart = true;
 
-    public $startretries = 10;
+    public $startretries = 5;
 
     public $user = '';
 
@@ -40,26 +40,7 @@ class SupervisorHelper extends Model
 
     public $stdout_logfile_backups = 20;
 
-    public $stdout_logfile = '';
-
-    public $supervisorConfigPath = '';
-
-
-    /**
-     * 刷新配置文件到 Supervisor config 目录
-     *
-     * @param $appId
-     * @param $jobsConfig
-     */
-    public static function saveToConfig($appId, $jobsConfig)
-    {
-
-        foreach ($jobsConfig as $jobConfig) {
-
-            $model = self::startJob($appId, $jobConfig);
-            $model->saveConfig();
-        }
-    }
+    public $stdout_logfile = 'knjk_deploy/supervisor_logs';
 
 
     public static function startJob($appId, $jobConfig = [])
@@ -92,33 +73,58 @@ class SupervisorHelper extends Model
 
         $config->program = $appId . '_kqueue_worker_' . $classKey;
         $config->numprocs = $jobConfig['worker_count'];
-        $config->stdout_logfile = $config->getLogsPath();
-        $config->user = $config->getUser();
 
-        $config->stdout_logfile = $config->getLogsPath();
+        $config->stdout_logfile = $config->getLogsFile($classKey);
+        $config->user = $config->getUser();
 
         return $config;
     }
 
 
     /**
-     * @param $file
-     *
      * @return string
      */
-    public function getConfigFile($file)
+    public function getUser()
     {
-
-        return '/usr/local/etc/supervisor.d/' . $file;
+        return $this->user;
     }
 
 
     /**
+     * @param string $classKey
      * @return string
      */
-    public function getConfigFileName()
+    public function getLogsFile($classKey)
     {
-        return $this->program . '.ini';
+        $dir = $this->directory . DIRECTORY_SEPARATOR . $this->stdout_logfile;
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        return $dir . DIRECTORY_SEPARATOR . "kqueue_$classKey.log";
+    }
+
+
+    /**
+     * @param $superPath
+     * @param $file
+     *
+     * @return string
+     */
+    public function getConfigFile($superPath, $file)
+    {
+
+        return $superPath . DIRECTORY_SEPARATOR . $file;
+    }
+
+
+    /**
+     * @param string $suffix
+     *
+     * @return string
+     */
+    public function getConfigFileName($suffix)
+    {
+        return $this->program . '.' . $suffix;
     }
 
 
@@ -137,9 +143,10 @@ autorestart =  {$this->autorestart}   ; 程序异常退出后自动重启
 startretries =  {$this->startretries}     ; 启动失败自动重试次数，默认是 3
 user =  {$this->user}          ; 用哪个用户启动
 redirect_stderr =  {$this->redirect_stderr}  ; 把 stderr 重定向到 stdout，默认 false
+stopsignal = TERM
 stdout_logfile_maxbytes =  {$this->stdout_logfile_maxbytes}  ; stdout 日志文件大小，默认 50MB
 stdout_logfile_backups =  {$this->stdout_logfile_backups}     ; stdout 日志文件备份数
-; stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
+;stdout 日志文件，需要注意当指定目录不存在时无法正常启动，所以需要手动创建目录（supervisord 会自动创建日志文件）
 stdout_logfile =  {$this->stdout_logfile}
 TMP;
 
@@ -147,10 +154,16 @@ TMP;
     }
 
 
-    public function saveConfig()
+    public function getSaveConfigFile($superPath, $suffix)
+    {
+        return $this->getConfigFile($superPath, $this->getConfigFileName($suffix));
+    }
+
+
+    public function saveConfig($superPath, $suffix = 'config')
     {
 
-        $filePath = $this->getConfigFile($this->getConfigFileName());
+        $filePath = $this->getSaveConfigFile($superPath, $suffix);
 
         return file_put_contents($filePath, $this->getConfigContent());
     }

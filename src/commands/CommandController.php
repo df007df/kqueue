@@ -26,6 +26,11 @@ class CommandController extends CliCommand
      */
     public $defaultAction = 'info';
 
+    /**
+     * @var bool 刷新supervisor配置
+     */
+    public $save = false;
+
 
     /**
      * @inheritdoc
@@ -33,8 +38,23 @@ class CommandController extends CliCommand
     public function actions()
     {
         return [
-            'info' => InfoAction::class,
+            'info'  => InfoAction::class,
+            'super' => SuperAction::class,
         ];
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function options($actionID)
+    {
+        $options = parent::options($actionID);
+        if ($actionID == 'super') {
+            $options[] = 'save';
+        }
+
+        return $options;
     }
 
 
@@ -93,6 +113,7 @@ class CommandController extends CliCommand
 
     /**
      * 过滤出当前worker
+     *
      * @param string $message
      *
      * @throws \Exception
