@@ -105,7 +105,7 @@ $msg = TestJob::push([
 ]);
 
 //返回队列id
-$msg->hasMsgId();
+$msg->getMsgId();
 
 //判断 job 是否在等待
 $msg->isWaiting();
