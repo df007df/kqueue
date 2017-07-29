@@ -134,4 +134,30 @@ $msg->isDone();
 
 ##### 因为此队列建议通过 supervisor 进行多进程管理，所以实际线上部署时，请使用 supervisor 进行管理。（supervisor使用请自行g）
 
+```
+
+#生成项目队列的 supervisor 配置文件的工具
+
+yii queue/super <superPath> [suffix] [user] [...options...]
+
+- superPath (required): string
+  supervisor加载的配置目录
+
+- suffix: string (defaults to 'config')
+  配置文件后缀
+
+- user: string (defaults to 'nginx')
+  执行脚本的用户
+  
+--save: boolean, 0 or 1 (defaults to 0)
+  刷新supervisor配置  
+  
+  
+#打印配置文件的内容，进行查看  
+./yii queue/super /usr/local/etc/supervisor.d ini df
+
+#刷新配置文件到指定目录
+./yii queue/super /usr/local/etc/supervisor.d ini df --save
+
+```
 
