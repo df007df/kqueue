@@ -40,7 +40,7 @@ class SupervisorHelper extends Model
 
     public $stdout_logfile_backups = 20;
 
-    public $stdout_logfile = 'knjk_deploy/supervisor_logs';
+    public $stdout_logfile = 'knjk_deploy/supervisor/logs';
 
 
     public static function startJob($appId, $jobConfig = [])
