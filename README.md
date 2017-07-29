@@ -135,6 +135,9 @@ $msg->isDone();
 ##### 因为此队列建议通过 supervisor 进行多进程管理，所以实际线上部署时，请使用 supervisor 进行管理。（supervisor使用请自行g）
 
 ```
+#启动 supervisord  mac版
+
+supervisord -c /usr/local/etc/supervisord.ini
 
 #生成项目队列的 supervisor 配置文件的工具
 
