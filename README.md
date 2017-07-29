@@ -137,6 +137,7 @@ $msg->isDone();
 ```
 
 #生成项目队列的 supervisor 配置文件的工具
+#根据配置所有 队列 log 统一打印到项目根目录下的knjk_deploy/supervisor_logs内（必须先保证执行supervisor前目录已经存在，不然supervisor无法正常执行。目录地址后期可再修改）
 
 yii queue/super <superPath> [suffix] [user] [...options...]
 
@@ -167,6 +168,4 @@ yii queue/super <superPath> [suffix] [user] [...options...]
 
 supervisord -c /usr/local/etc/supervisord.ini
 
-
 ```
-
