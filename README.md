@@ -135,9 +135,6 @@ $msg->isDone();
 ##### 因为此队列建议通过 supervisor 进行多进程管理，所以实际线上部署时，请使用 supervisor 进行管理。（supervisor使用请自行g）
 
 ```
-#启动 supervisord  mac版
-
-supervisord -c /usr/local/etc/supervisord.ini
 
 #生成项目队列的 supervisor 配置文件的工具
 
@@ -163,6 +160,13 @@ yii queue/super <superPath> [suffix] [user] [...options...]
 
 #刷新配置文件到指定目录
 ./yii queue/super /usr/local/etc/supervisor.d ini df --save
+
+
+
+#启动 supervisord  mac版
+
+supervisord -c /usr/local/etc/supervisord.ini
+
 
 ```
 
