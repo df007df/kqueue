@@ -104,6 +104,13 @@ $msg = TestJob::push([
     'date' => date('Y-m-d H:i:s')
 ]);
 
+
+//延时发送队列，300秒后再执行队列。方便处理需要等待一段时间后，再执行的工作。
+$msg = TestJob::push([
+    'name' => rand(1,50),
+    'date' => date('Y-m-d H:i:s')
+], 300);
+
 //返回队列id
 $msg->getMsgId();
 
